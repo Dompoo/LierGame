@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>라이어 게임</title>
+    <style>
+      .status-container {
+        font-size: 30px;
+        font-weight: bold;
+      }
+      .time-container {
+        text-align: center;
+        line-height: 160px;
+        font-size: 150px;
+        font-weight: bold;
+        color: black;
+
+      }
+      .body-container{
+        font-size: 30px;
+        font-weight: bold;
+      }
+    </style>
+    <style type="text/css">
+    div#up{
+      width: 750px;
+      height: 200px;
+      background-color: green;
+      float: left;
+      margin: 5px;
+    }
+    #left_up_box{
+      width: 355px;
+      height: 180px;
+      background-color: white;
+      float:left;
+      margin: 10px;
+    }
+    #right_up_box{
+      width: 355px;
+      height: 180px;
+      background-color: white;
+      float: right;
+      margin: 10px;
+    }
+    #mid_content{
+      width: 750px;
+      height: 400px;
+      background-color: green;
+      float: left;
+      margin: 5px;
+    }
+    #mid_content_box{
+      width: 730;
+      height: 380px;
+      background-color: white;
+      margin: 10px;
+    }
+    </style>
+  </head>
+  <body>
+    <div id="up">
+      <div class="status-container" id="left_up_box">플레이어3가<br>단어를 보는 중...</div>
+      <div class="time-container" id="right_up_box">1:31</div>
+    </div>
+    <div id="mid_content">
+      <div class="body-container" id="mid_content_box">단어를 보시려면 클릭하세요.</div>
+    </div>
+  </body>
+</html>
