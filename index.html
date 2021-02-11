@@ -14,9 +14,6 @@
         font-size: 120px;
         font-weight: bold;
       }
-      #mid_content_box input {
-        display: none;
-      }
       #up{
         width: 750px;
         height: 200px;
@@ -51,32 +48,73 @@
         background-color: white;
         margin: 10px;
       }
-      #button {
+      #mid_content_box input{
+        display: none;
+
         margin-top: 20%;
         margin-left: 12%;
         background-color: gold;
         border: none;
-        font-size: 50px;
+        font-size: 30px;
         border-radius: 10px;
         box-shadow: 0 2px 3px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
       }
     </style>
     <script type="text/javascript">
-      // const subject = ["동물", "음식", "장소", "탈 것"];
-      // const word = [["개", "고양이", "소", "올챙이", "쥐", "지네", "호랑이", "기린", "표범", "너구리", "스컹크", "친칠라", "캥거루", "사슴", "알파카", "토끼", "고슴도치", "개미핥기", "참새", "부엉이"], ["볶음밥"], ["카페"], ["놀이기구"]];
-      // var selectedWord = word[0][floor(Math.random() * 19) + 0];
-      // var lierNum = floor(Math.random() * 5) + 1;
-      // var count = 0;
+      const subject = ["동물", "음식", "장소", "탈 것"];
+      const word = [["개", "고양이", "소", "올챙이", "쥐", "지네", "호랑이", "기린", "표범", "너구리", "스컹크", "친칠라", "캥거루", "사슴", "알파카", "토끼", "고슴도치", "개미핥기", "참새", "부엉이"], ["볶음밥"], ["카페"], ["놀이기구"]];
+      var selectedWord = word[0][Math.floor(Math.random() * 19) + 0];
+      var lierNum
+      var peopleNum;
+      var i = 1;
 
-      function wordClick() {
-        alert('hello');
-        count = count + 1;
-        if(count == lierNum) {
-          alert('lier');
+      function setPeopleNum(num) {
+        peopleNum = num;
+        lierNum = Math.floor(Math.random() * peopleNum) + 1;
+
+        var button = document.getElementById("clickWord");
+        var button2 = document.getElementById("clickNext");
+
+        button.style.display = 'inline';
+        button2.style.display = 'inline';
+
+        document.getElementById("peopleNum").style.display = 'none';
+        document.getElementById("submitButton").style.display = 'none';
+        document.getElementById("statusBox").innerHTML = i + "번째 사람입니다.";
+      }
+
+      function nextPeople() {
+        i++;
+        document.getElementById("statusBox").innerHTML = i + "번째 사람입니다.";
+        if(i == peopleNum)
+        {
+          document.getElementById("clickNext").value = '게임 시작하기.';
+        }
+        else if(i > peopleNum)
+        {
+          document.getElementById("clickNext").onclick = gameStart();
         }
       }
 
-      function setTimer(var time) {
+      function lierCheck() {
+        if(i == lierNum)
+        {
+          alert('당신은 라이어 입니다.');
+        }
+        else {
+          alert('당신은 라이어가 아닙니다.');
+        }
+      }
+
+      function  gameStart() {
+        document.getElementById("clickWord").style.display = 'none';
+        document.getElementById("clickNext").style.display = 'none';
+        document.getElementById("statusBox").innerHTML = "";
+
+        setTimer(180);
+      }
+
+      function setTimer(time) {
         var x = setInterval(function() {
           document.getElementById("right_up_box").innerHTML = time + "초";
           time--;
@@ -87,17 +125,28 @@
           }
         }, 1000);
       }
+
+
     </script>
   </head>
   <body>
     <div id="up">
-      <div class="status-container" id="left_up_box">      <input type="text" name="" value="인원수">
-</div>
+
+      <div class="status-container" id="left_up_box">
+        <br>
+        <div id="statusBox">인원수</div>
+        <input type="text" id="peopleNum" onchange="setPeopleNum(this.value)">
+        <input type="button" id="submitButton" value="submit">
+      </div>
+
       <div class="time-container" id="right_up_box"></div>
+
     </div>
+
     <div id="mid_content">
       <div class="body-container" id="mid_content_box">
-        <input type="button" id="button" value="클릭하여 단어를 봅니다." display = "none" onclick="wordClick();">
+        <input type="button" id="clickWord" value="직업확인" onclick="lierCheck()">
+        <input type="button" id="clickNext" value="다음사람" onclick="nextPeople()">
       </div>
     </div>
   </body>
