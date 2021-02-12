@@ -4,55 +4,54 @@
     <meta charset="utf-8">
     <title>라이어 게임</title>
     <style>
+
       .status-container, .body-container {
         font-size: 30px;
         font-weight: bold;
       }
       .time-container {
-        text-align: center;
-        line-height: 160px;
-        font-size: 120px;
-        font-weight: bold;
       }
-      #up{
-        width: 750px;
+
+      #top{
+        display: block;
+
+        width: 400px;
         height: 200px;
         background-color: green;
         float: left;
         margin: 5px;
       }
-      #left_up_box{
-        width: 355px;
+      #top_box{
+        display: block;
+
+        width: 380px;
         height: 180px;
         background-color: white;
-        float:left;
         margin: 10px;
       }
-      #right_up_box{
-        width: 355px;
-        height: 180px;
-        background-color: white;
-        float: right;
-        margin: 10px;
-      }
-      #mid_content{
-        width: 750px;
-        height: 400px;
+      #mid{
+        display: block;
+
+        width: 400px;
+        height: 300px;
         background-color: green;
         float: left;
         margin: 5px;
       }
-      #mid_content_box{
-        width: 730;
-        height: 380px;
+      #mid_box{
+        display: block;
+
+        width: 360px;
+        height: 260px;
         background-color: white;
         margin: 10px;
+        padding: 10px;
       }
-      #mid_content_box input{
+      #mid_box input{
         display: none;
-
-        margin-top: 20%;
-        margin-left: 12%;
+        padding: none;
+        margin-top: 60px;
+        margin-left: 7%;
         background-color: gold;
         border: none;
         font-size: 30px;
@@ -66,26 +65,24 @@
       var selectedWord = word[0][Math.floor(Math.random() * 19) + 0];
       var lierNum
       var peopleNum;
-      var i = 1;
+      var i = 0;
 
       function setPeopleNum(num) {
         peopleNum = num;
         lierNum = Math.floor(Math.random() * peopleNum) + 1;
 
-        var button = document.getElementById("clickWord");
-        var button2 = document.getElementById("clickNext");
 
-        button.style.display = 'inline';
-        button2.style.display = 'inline';
 
+        document.getElementById("clickWord").style.display = 'block';
+        document.getElementById("clickNext").style.display = 'block';
         document.getElementById("peopleNum").style.display = 'none';
         document.getElementById("submitButton").style.display = 'none';
-        document.getElementById("statusBox").innerHTML = i + "번째 사람입니다.";
+        nextPeople();
       }
 
       function nextPeople() {
         i++;
-        document.getElementById("statusBox").innerHTML = i + "번째 사람입니다.";
+        document.getElementById("statusBox").innerHTML = "<br>플레이어" + i + "의 차례입니다.";
         if(i == peopleNum)
         {
           document.getElementById("clickNext").value = '게임 시작하기.';
@@ -107,21 +104,36 @@
       }
 
       function  gameStart() {
-        document.getElementById("clickWord").style.display = 'none';
-        document.getElementById("clickNext").style.display = 'none';
         document.getElementById("statusBox").innerHTML = "";
+
+        document.getElementById("clickNext").value = '단어를 추리하기';
+        document.getElementById("clickNext").onclick = function () {
+          reasonWord();
+        }
+        document.getElementById("clickWord").value = '라이어를 투표하기';
+        document.getElementById("clickWord").onclick = function () {
+          voteLier();
+        }
 
         setTimer(180);
       }
 
+      function reasonWord() {
+
+      }
+
+      function voteLier() {
+      }
+
       function setTimer(time) {
+        var box = document.getElementById("top_box");
         var x = setInterval(function() {
-          document.getElementById("right_up_box").innerHTML = time + "초";
+          box.innerHTML = time + "초";
           time--;
 
           if (time < 0 ) {
             clearInterval(x);
-            document.getElementById("right_up_box").innerHTML = "시간초과";
+            box.innerHTML = "시간초과";
           }
         }, 1000);
       }
@@ -130,21 +142,16 @@
     </script>
   </head>
   <body>
-    <div id="up">
-
-      <div class="status-container" id="left_up_box">
-        <br>
-        <div id="statusBox">인원수</div>
+    <div id="top">
+      <div class="status-container" id="top_box">
+        <div id="statusBox"><br>인원수</div>
         <input type="text" id="peopleNum" onchange="setPeopleNum(this.value)">
         <input type="button" id="submitButton" value="submit">
       </div>
-
-      <div class="time-container" id="right_up_box"></div>
-
     </div>
 
-    <div id="mid_content">
-      <div class="body-container" id="mid_content_box">
+    <div id="mid">
+      <div class="body-container" id="mid_box">
         <input type="button" id="clickWord" value="직업확인" onclick="lierCheck()">
         <input type="button" id="clickNext" value="다음사람" onclick="nextPeople()">
       </div>
