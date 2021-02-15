@@ -5,11 +5,9 @@
     <title>라이어 게임</title>
     <style>
 
-      .status-container, .body-container {
+      #statusBox, .body-container {
         font-size: 30px;
         font-weight: bold;
-      }
-      .time-container {
       }
 
       #top{
@@ -24,10 +22,11 @@
       #top_box{
         display: block;
 
-        width: 380px;
-        height: 180px;
+        width: 360px;
+        height: 160px;
         background-color: white;
         margin: 10px;
+        padding: 10px;
       }
       #mid{
         display: block;
@@ -47,7 +46,7 @@
         margin: 10px;
         padding: 10px;
       }
-      #mid_box input{
+      #button input{
         display: none;
         padding: none;
         margin-top: 60px;
@@ -60,22 +59,22 @@
       }
     </style>
     <script type="text/javascript">
-      const subject = ["동물", "음식", "장소", "탈 것"];
-      const word = [["개", "고양이", "소", "올챙이", "쥐", "지네", "호랑이", "기린", "표범", "너구리", "스컹크", "친칠라", "캥거루", "사슴", "알파카", "토끼", "고슴도치", "개미핥기", "참새", "부엉이"], ["볶음밥"], ["카페"], ["놀이기구"]];
-      var selectedWord = word[0][Math.floor(Math.random() * 19) + 0];
+      // const subject = ["동물", "음식", "장소", "탈 것"];
+      const word = ["개", "고양이", "소", "올챙이", "쥐", "지네", "호랑이", "기린", "표범", "너구리", "스컹크", "친칠라", "캥거루", "사슴", "알파카", "토끼", "고슴도치", "개미핥기", "참새", "부엉이"];
+      var selectedWord = word[Math.floor(Math.random() * 19) + 0];
       var lierNum
       var peopleNum;
       var i = 0;
+      var timerID;
+
 
       function setPeopleNum(num) {
         peopleNum = num;
         lierNum = Math.floor(Math.random() * peopleNum) + 1;
 
-
-
         document.getElementById("clickWord").style.display = 'block';
         document.getElementById("clickNext").style.display = 'block';
-        document.getElementById("peopleNum").style.display = 'none';
+        document.getElementById("number").style.display = 'none';
         document.getElementById("submitButton").style.display = 'none';
         nextPeople();
       }
@@ -99,45 +98,167 @@
           alert('당신은 라이어 입니다.');
         }
         else {
-          alert('당신은 라이어가 아닙니다.');
+          alert('제시어는 "' + selectedWord + '" 입니다.');
         }
       }
 
       function  gameStart() {
         document.getElementById("statusBox").innerHTML = "";
-
-        document.getElementById("clickNext").value = '단어를 추리하기';
-        document.getElementById("clickNext").onclick = function () {
-          reasonWord();
-        }
+        document.getElementById("clickNext").style.display = 'none'
         document.getElementById("clickWord").value = '라이어를 투표하기';
         document.getElementById("clickWord").onclick = function () {
           voteLier();
         }
 
-        setTimer(180);
-      }
-
-      function reasonWord() {
-
-      }
-
-      function voteLier() {
-      }
-
-      function setTimer(time) {
-        var box = document.getElementById("top_box");
-        var x = setInterval(function() {
+        var time = 180;
+        var box = document.getElementById("statusBox");
+        timerID = setInterval(function() {
+          box.style.fontSize = "100px";
           box.innerHTML = time + "초";
           time--;
-
           if (time < 0 ) {
-            clearInterval(x);
-            box.innerHTML = "시간초과";
+            clearInterval(timerID);
+            box.innerHTML = '<br>토론시간이 끝났습니다.<br>라이어를 투표해주세요.';
+            voteLier();
           }
         }, 1000);
       }
 
+
+      function voteLier() {
+        clearInterval(timerID);
+        document.getElementById("statusBox").style.fontSize = "30px";
+
+        document.getElementById("statusBox").innerHTML = "몇 번째 플레이어가<br>라이어일지 투표하세요.";
+        document.getElementById("clickWord").style.display = 'none';
+        document.getElementById("clickNext").style.display = 'none';
+        document.getElementById("number").style.display = 'inline';
+        document.getElementById("number").value = "";
+        document.getElementById("number").onchange = function() {
+          isLierRight(this.value);
+        }
+        document.getElementById("submitButton").style.display = 'inline';
+      }
+
+      function isLierRight(num) {
+
+        document.getElementById("number").style.display = 'none';
+        document.getElementById("submitButton").style.display = 'none';
+
+        var right = num == lierNum;
+        var time = 2;
+        var bool = true;
+        var message = "<br>여러분이 고른 사람은<br>라이어가";
+
+        var box = document.getElementById("statusBox");
+        timerID = setInterval(function() {
+          box.innerHTML = message;
+
+          if (time < 0) {
+            if(right) {
+              if (bool) {
+                message += " 맞습니다!!"
+                bool = false;
+              }
+              if (time < -2) {
+                message = "<br>이제 라이어가<br>단어를 추리합니다.";
+              }
+              if (time < -4) {
+                clearInterval(timerID);
+                reasonWord();
+              }
+            }
+            else {
+              if (bool) {
+                message += " 아닙니다!!"
+                bool = false;
+              }
+              if (time < -2) {
+                var mid = document.getElementById("mainBox")
+                mid.style.fontSize = "70px";
+                mid.innerHTML = "라이어 승!";
+                clearInterval(timerID);
+              }
+            }
+          }
+          else {
+            message += ".";
+          }
+          time--;
+        }, 1200);
+      }
+
+      function reasonWord() {
+        document.getElementById("wordNum").style.display = 'inline';
+        document.getElementById("submitButton2").style.display = 'inline';
+        makeWordList();
+      }
+
+      function makeWordList() {
+        var str = "";
+        // var index = 0;
+        for (var i = 0; i < 5; i++) {
+          for (var j = 0; j < 4; j++) {
+            var index = i * 4 + j + 1;
+            str += index + "." + word[index - 1] + "  ";
+          }
+          str += "<br>";
+        }
+        var box = document.getElementById("mainBox");
+        box.style.fontSize = "15px";
+        box.innerHTML = str;
+      }
+
+      function isWordRight(num) {
+        document.getElementById("mainBox").style.display = 'none';
+        document.getElementById("wordNum").style.display = 'none';
+        document.getElementById("submitButton2").style.display = 'none';
+
+
+
+        var right = selectedWord == word[num - 1];
+        var time = 2;
+        var bool = true;
+        var message = "<br>라이어는 <br>추리에";
+
+        var box = document.getElementById("statusBox");
+        timerID = setInterval(function() {
+          box.innerHTML = message;
+
+          if (time < 0) {
+            if(right) {
+              if(bool) {
+                message += " 성공했습니다!";
+                bool = false;
+              }
+              if(time < -2) {
+                var mid = document.getElementById("mainBox")
+                mid.style.display = 'inline';
+                mid.style.fontSize = "70px";
+                mid.innerHTML = "라이어 승!";
+                clearInterval(timerID);
+              }
+            }
+            else {
+              if(bool) {
+                message += " 실패했습니다!"
+                bool = false;
+              }
+              if(time < -2) {
+                var mid = document.getElementById("mainBox")
+                mid.style.display = 'inline';
+                mid.style.fontSize = "70px";
+                mid.innerHTML = "라이어 패!";
+                clearInterval(timerID);
+              }
+            }
+          }
+          else {
+            message += ".";
+          }
+          time--;
+        }, 1200);
+      }
 
     </script>
   </head>
@@ -145,15 +266,21 @@
     <div id="top">
       <div class="status-container" id="top_box">
         <div id="statusBox"><br>인원수</div>
-        <input type="text" id="peopleNum" onchange="setPeopleNum(this.value)">
-        <input type="button" id="submitButton" value="submit">
+        <input type="number" id="number" onchange="setPeopleNum(this.value)">
+        <input type="button" id="submitButton" value="제출">
       </div>
     </div>
-
     <div id="mid">
       <div class="body-container" id="mid_box">
-        <input type="button" id="clickWord" value="직업확인" onclick="lierCheck()">
-        <input type="button" id="clickNext" value="다음사람" onclick="nextPeople()">
+        <div id="mainBox"></div>
+        <div id="button">
+          <input type="button" id="clickWord" value="단어확인" onclick="lierCheck()">
+          <input type="button" id="clickNext" value="다음사람" onclick="nextPeople()">
+        </div>
+        <div id="numBox">
+          <input type="number" id="wordNum" style="display: none" onchange="isWordRight(this.value)">
+          <input type="button" id="submitButton2" style="display: none" value="제출">
+        </div>
       </div>
     </div>
   </body>
