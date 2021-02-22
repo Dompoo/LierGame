@@ -12,10 +12,9 @@
 
       #top{
         display: block;
-
         width: 400px;
         height: 200px;
-        background-color: green;
+        background-color: white;
         float: left;
         margin: 5px;
       }
@@ -33,7 +32,7 @@
 
         width: 400px;
         height: 300px;
-        background-color: green;
+        background-color: white;
         float: left;
         margin: 5px;
       }
@@ -51,32 +50,60 @@
         padding: none;
         margin-top: 60px;
         margin-left: 7%;
-        background-color: gold;
+        background-color: green;
         border: none;
         font-size: 30px;
         border-radius: 10px;
         box-shadow: 0 2px 3px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
       }
+      /* #radioButton {
+        display: none;
+      } */
     </style>
     <script type="text/javascript">
-      // const subject = ["동물", "음식", "장소", "탈 것"];
-      const word = ["개", "고양이", "소", "올챙이", "쥐", "지네", "호랑이", "기린", "표범", "너구리", "스컹크", "친칠라", "캥거루", "사슴", "알파카", "토끼", "고슴도치", "개미핥기", "참새", "부엉이"];
-      var selectedWord = word[Math.floor(Math.random() * 19) + 0];
-      var lierNum
+      // const subject = ["동물", "음식", "도구", "탈 것"];
+      const animalWord = ["개", "고양이", "소", "올챙이", "쥐", "지네", "호랑이", "기린", "표범", "너구리", "스컹크", "친칠라", "캥거루", "사슴", "알파카", "토끼", "고슴도치", "개미핥기", "참새", "부엉이"];
+      const foodWord = ["밀푀유나베", "고추전", "김치", "해장국", "순두부찌개", "삼겹살", "뻥튀기", "추어탕", "빙수", "곱창", "잡채", "도토리묵", "푸아그라", "맥앤치즈", "오꼬노미야끼", "리조또", "팟타이", "커리", "부리또", "마라롱샤"];
+      const toolWord = ["볼트", "지퍼백", "빗자루", "젓가락", "와인오프너", "커터칼", "변깃솔", "망치", "밀대", "삼지창", "채찍", "망원경", "종이컵", "립밤", "치실", "신용카드", "정원가위", "식칼", "손", "렌치"];
+      const vehicleWord = ["세발자전거", "스노보드", "유모차", "여객선", "구급차", "오토바이", "디스코팡팡", "쇄빙선", "배트모빌", "고래잡이배", "막차", "눈썰매", "회전목마", "시소", "그네", "서핑보드", "해적선", "화물선", "나무", "양탄자"];
+      var word = [];
+      var selectedWord;
+      var lierNum;
       var peopleNum;
       var i = 0;
       var timerID;
 
 
-      function setPeopleNum(num) {
-        peopleNum = num;
+      function setPeopleNum() {
+        peopleNum = document.querySelector('input[id="number"]').value;
         lierNum = Math.floor(Math.random() * peopleNum) + 1;
-
+        setSubject();
         document.getElementById("clickWord").style.display = 'block';
         document.getElementById("clickNext").style.display = 'block';
         document.getElementById("number").style.display = 'none';
+        document.getElementById("radioButton").style.display = 'none';
         document.getElementById("submitButton").style.display = 'none';
         nextPeople();
+      }
+
+      function setSubject() {
+        var subject = document.querySelector('input[name="subject"]:checked').value;
+        if(subject == "동물") {
+           selectedWord = animalWord[Math.floor(Math.random() * 19) + 0];
+           word = animalWord;
+        }
+        if (subject == "음식") {
+          selectedWord = foodWord[Math.floor(Math.random() * 19) + 0];
+          word = foodWord;
+        }
+        if (subject == "도구") {
+          selectedWord = toolWord[Math.floor(Math.random() * 19) + 0];
+          word = toolWord;
+        }
+        if (subject == "탈 것") {
+          selectedWord = vehicleWord[Math.floor(Math.random() * 19) + 0];
+          word = vehicleWord;
+        }
       }
 
       function nextPeople() {
@@ -265,9 +292,15 @@
   <body>
     <div id="top">
       <div class="status-container" id="top_box">
-        <div id="statusBox"><br>인원수</div>
-        <input type="number" id="number" onchange="setPeopleNum(this.value)">
-        <input type="button" id="submitButton" value="제출">
+        <div id="statusBox"><br>인원수, 주제 설정</div>
+        <input type="number" name="numOfPeople" id="number">
+        <div id="radioButton">
+          <input type="radio" name="subject" checked = "checked" value="동물"/> 동물
+          <input type="radio" name="subject" value="음식"/> 음식
+          <input type="radio" name="subject" value="도구"/> 도구
+          <input type="radio" name="subject" value="탈 것"/> 탈 것
+        </div>
+        <input type="button" id="submitButton" value="제출" onclick="setPeopleNum()">
       </div>
     </div>
     <div id="mid">
